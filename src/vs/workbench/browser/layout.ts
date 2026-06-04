@@ -26,6 +26,7 @@ import { EditorGroupLayout, GroupActivationReason, GroupOrientation, GroupsOrder
 import { SerializableGrid, ISerializableView, ISerializedGrid, Orientation, ISerializedNode, ISerializedLeafNode, Direction, IViewSize, Sizing } from '../../base/browser/ui/grid/grid.js';
 import { Part } from './part.js';
 import { IStatusbarService } from '../services/statusbar/browser/statusbar.js';
+import { ISecondBarService } from '../services/secondBar/browser/secondBarService.js';
 import { IFileService } from '../../platform/files/common/files.js';
 import { isCodeEditor } from '../../editor/browser/editorBrowser.js';
 import { coalesce } from '../../base/common/arrays.js';
@@ -273,6 +274,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private panelPartView!: ISerializableView;
 	private auxiliaryBarPartView!: ISerializableView;
 	private editorPartView!: ISerializableView;
+	private secondBarPartView!: ISerializableView;
 	private statusBarPartView!: ISerializableView;
 
 	private environmentService!: IBrowserWorkbenchEnvironmentService;
@@ -330,6 +332,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.notificationService = accessor.get(INotificationService);
 		this.statusBarService = accessor.get(IStatusbarService);
 		accessor.get(IBannerService);
+		accessor.get(ISecondBarService);
 
 		// Listeners
 		this.registerLayoutListeners();
@@ -1339,6 +1342,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 				return !this.stateModel.getRuntimeValue(LayoutStateKeys.AUXILIARYBAR_HIDDEN);
 			case Parts.STATUSBAR_PART:
 				return !this.stateModel.getRuntimeValue(LayoutStateKeys.STATUSBAR_HIDDEN);
+			case Parts.SECONDBAR_PART:
+				return true; // the second bar is always visible
 			case Parts.ACTIVITYBAR_PART:
 				return !this.stateModel.getRuntimeValue(LayoutStateKeys.ACTIVITYBAR_HIDDEN);
 			case Parts.EDITOR_PART:
@@ -1388,6 +1393,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			const takenHeight =
 				(this.isVisible(Parts.TITLEBAR_PART, targetWindow) ? this.titleBarPartView.minimumHeight : 0) +
 				(this.isVisible(Parts.STATUSBAR_PART, targetWindow) ? this.statusBarPartView.minimumHeight : 0) +
+				this.secondBarPartView.minimumHeight +
 				(this.isVisible(Parts.PANEL_PART) && isPanelHorizontal ? this.panelPartView.minimumHeight : 0);
 
 			const availableWidth = containerDimension.width - takenWidth;
@@ -1608,6 +1614,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const panelPart = this.getPart(Parts.PANEL_PART);
 		const auxiliaryBarPart = this.getPart(Parts.AUXILIARYBAR_PART);
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
+		const secondBar = this.getPart(Parts.SECONDBAR_PART);
 		const statusBar = this.getPart(Parts.STATUSBAR_PART);
 
 		// View references for all parts
@@ -1618,6 +1625,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.editorPartView = editorPart;
 		this.panelPartView = panelPart;
 		this.auxiliaryBarPartView = auxiliaryBarPart;
+		this.secondBarPartView = secondBar;
 		this.statusBarPartView = statusBar;
 
 		const viewMap: Record<string, ISerializableView> = {
@@ -1627,6 +1635,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			[Parts.EDITOR_PART]: this.editorPartView,
 			[Parts.PANEL_PART]: this.panelPartView,
 			[Parts.SIDEBAR_PART]: this.sideBarPartView,
+			[Parts.SECONDBAR_PART]: this.secondBarPartView,
 			[Parts.STATUSBAR_PART]: this.statusBarPartView,
 			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView
 		};
@@ -1643,7 +1652,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.workbenchGrid = workbenchGrid;
 		this.workbenchGrid.edgeSnapping = this.state.runtime.mainWindowFullscreen;
 
-		for (const part of [titleBar, editorPart, activityBar, panelPart, sideBar, statusBar, auxiliaryBarPart, bannerPart]) {
+		for (const part of [titleBar, editorPart, activityBar, panelPart, sideBar, secondBar, statusBar, auxiliaryBarPart, bannerPart]) {
 			this._register(part.onDidVisibilityChange(visible => {
 				if (!this.inMaximizedAuxiliaryBarTransition) {
 
@@ -2595,8 +2604,9 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const titleBarHeight = this.titleBarPartView.minimumHeight;
 		const bannerHeight = this.bannerPartView.minimumHeight;
 		const statusBarHeight = this.statusBarPartView.minimumHeight;
+		const secondBarHeight = this.secondBarPartView.minimumHeight;
 		const activityBarWidth = this.activityBarPartView.minimumWidth;
-		const middleSectionHeight = height - titleBarHeight - statusBarHeight;
+		const middleSectionHeight = height - titleBarHeight - statusBarHeight - secondBarHeight;
 
 		const titleAndBanner: ISerializedNode[] = [
 			{
@@ -2666,6 +2676,12 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 						type: 'branch',
 						data: middleSection,
 						size: middleSectionHeight
+					},
+					{
+						type: 'leaf',
+						data: { type: Parts.SECONDBAR_PART },
+						size: secondBarHeight,
+						visible: true
 					},
 					{
 						type: 'leaf',

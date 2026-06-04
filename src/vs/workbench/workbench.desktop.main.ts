@@ -170,6 +170,9 @@ import './contrib/splash/electron-browser/splash.contribution.js';
 // Cut-In Animation
 import './contrib/cutIn/electron-browser/cutIn.contribution.js';
 
+// XKCD (depends on Cut-In being registered first)
+import './contrib/xkcd/electron-browser/xkcd.contribution.js';
+
 // Local History
 import './contrib/localHistory/electron-browser/localHistory.contribution.js';
 

@@ -167,6 +167,9 @@ import './contrib/browserView/electron-browser/browserView.contribution.js';
 // Splash
 import './contrib/splash/electron-browser/splash.contribution.js';
 
+// Cut-In Animation
+import './contrib/cutIn/electron-browser/cutIn.contribution.js';
+
 // Local History
 import './contrib/localHistory/electron-browser/localHistory.contribution.js';
 

@@ -1,0 +1,293 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+/* --- Shared --- */
+
+.cut-in-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 2500;
+	pointer-events: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.cut-in-flash {
+	position: fixed;
+	inset: 0;
+	background: #ffffff;
+	z-index: 2499;
+	pointer-events: none;
+	animation: cutInFlash 0.4s ease-out forwards;
+}
+
+@keyframes cutInFlash {
+	0% { opacity: 0.9; }
+	100% { opacity: 0; }
+}
+
+/* --- MvC Style --- */
+
+.cut-in-panel-mvc {
+	width: 320px;
+	height: 420px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(135deg, #1e1e2e 0%, #e74c3c 40%, #ff6b6b 60%, #1e1e2e 100%);
+	clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+	box-shadow: 0 0 60px rgba(231, 76, 60, 0.6), 0 0 120px rgba(231, 76, 60, 0.3);
+	animation: mvcEnter 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+	pointer-events: auto;
+	cursor: pointer;
+}
+
+.cut-in-panel-mvc .cut-in-text {
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 42px;
+	font-weight: 900;
+	color: #ffffff;
+	text-transform: uppercase;
+	letter-spacing: 6px;
+	text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 2px 2px 0 rgba(0, 0, 0, 0.8);
+	transform: skewX(-5deg);
+}
+
+@keyframes mvcEnter {
+	0% { transform: translateX(-120vw) scale(1.1); }
+	100% { transform: translateX(0) scale(1.05); }
+}
+
+@keyframes mvcExit {
+	0% { transform: translateX(0) scale(1.05); }
+	100% { transform: translateX(120vw) scale(1); }
+}
+
+/* --- Persona 5 Style --- */
+
+.cut-in-panel-persona {
+	width: 100vw;
+	height: 140px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 24px;
+	background: #e70011;
+	clip-path: polygon(0% 10%, 100% 0%, 100% 90%, 0% 100%);
+	transform: skewY(-2deg);
+	animation: personaEnter 0.15s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+	pointer-events: auto;
+	cursor: pointer;
+	position: relative;
+}
+
+.cut-in-panel-persona::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: repeating-conic-gradient(
+		rgba(0, 0, 0, 0.08) 0deg 5deg,
+		transparent 5deg 10deg
+	);
+	animation: personaSpin 4s linear infinite;
+}
+
+@keyframes personaSpin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.cut-in-panel-persona .cut-in-text {
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 72px;
+	font-weight: 900;
+	font-style: italic;
+	color: #000000;
+	text-transform: uppercase;
+	letter-spacing: -2px;
+	position: relative;
+	z-index: 1;
+}
+
+.cut-in-panel-persona .cut-in-subtext {
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 24px;
+	font-weight: 700;
+	color: #ffffff;
+	text-transform: uppercase;
+	letter-spacing: 8px;
+	position: relative;
+	z-index: 1;
+}
+
+@keyframes personaEnter {
+	0% { transform: skewY(-2deg) translateX(120vw); }
+	100% { transform: skewY(-2deg) translateX(0); }
+}
+
+@keyframes personaExit {
+	0% { transform: skewY(-2deg) translateX(0); opacity: 1; }
+	100% { transform: skewY(-2deg) translateX(-120vw); opacity: 1; }
+}
+
+/* --- Phoenix Wright Style --- */
+
+.cut-in-panel-phoenix {
+	width: 80vw;
+	max-width: 900px;
+	height: 280px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 8px;
+	background: linear-gradient(180deg, #1a5c2a 0%, #2d8f47 50%, #1a5c2a 100%);
+	border: 6px solid #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 0 0 4px #000000, 0 0 80px rgba(45, 143, 71, 0.6);
+	animation: phoenixEnter 0.1s ease-out forwards, phoenixShake 0.3s 0.1s ease-out;
+	pointer-events: auto;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+}
+
+.cut-in-panel-phoenix::before {
+	content: '';
+	position: absolute;
+	inset: -50%;
+	background: repeating-conic-gradient(
+		rgba(255, 255, 255, 0.05) 0deg 3deg,
+		transparent 3deg 6deg
+	);
+	animation: phoenixLines 2s linear infinite;
+}
+
+@keyframes phoenixLines {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.cut-in-panel-phoenix .cut-in-text {
+	font-family: 'Georgia', 'Times New Roman', serif;
+	font-size: 80px;
+	font-weight: 900;
+	font-style: italic;
+	color: #ffffff;
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	text-shadow: 4px 4px 0 #000000, -2px -2px 0 #000000, 2px -2px 0 #000000, -2px 2px 0 #000000;
+	position: relative;
+	z-index: 1;
+}
+
+.cut-in-panel-phoenix .cut-in-subtext {
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 18px;
+	font-weight: 600;
+	color: #ffffff;
+	text-transform: uppercase;
+	letter-spacing: 6px;
+	opacity: 0.8;
+	position: relative;
+	z-index: 1;
+}
+
+@keyframes phoenixEnter {
+	0% { transform: scale(0.3); opacity: 0; }
+	100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes phoenixShake {
+	0%, 100% { transform: translateX(0); }
+	10% { transform: translateX(-12px); }
+	20% { transform: translateX(10px); }
+	30% { transform: translateX(-8px); }
+	40% { transform: translateX(6px); }
+	50% { transform: translateX(-4px); }
+	60% { transform: translateX(2px); }
+}
+
+@keyframes phoenixExit {
+	0% { transform: scale(1); opacity: 1; }
+	100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* --- Guilty Gear Style --- */
+
+.cut-in-panel-guilty-gear {
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #000000;
+	clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+	animation: ggEnter 0.2s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+	pointer-events: auto;
+	cursor: pointer;
+}
+
+.cut-in-panel-guilty-gear::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background:
+		linear-gradient(45deg, transparent 48%, rgba(255, 50, 50, 0.15) 49%, rgba(255, 50, 50, 0.15) 51%, transparent 52%),
+		linear-gradient(-45deg, transparent 48%, rgba(255, 50, 50, 0.15) 49%, rgba(255, 50, 50, 0.15) 51%, transparent 52%);
+	background-size: 40px 40px;
+}
+
+.cut-in-panel-guilty-gear::after {
+	content: '';
+	position: absolute;
+	inset: 6px;
+	border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.cut-in-panel-guilty-gear .cut-in-text {
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 96px;
+	font-weight: 900;
+	color: #ff3232;
+	text-transform: uppercase;
+	letter-spacing: 16px;
+	text-shadow: 0 0 40px rgba(255, 50, 50, 0.8), 0 0 80px rgba(255, 50, 50, 0.4);
+	position: relative;
+	z-index: 1;
+	animation: ggTextReveal 0.3s 0.15s ease-out both;
+}
+
+.cut-in-panel-guilty-gear .cut-in-subtext {
+	position: absolute;
+	bottom: 30%;
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 20px;
+	font-weight: 600;
+	color: rgba(255, 255, 255, 0.6);
+	text-transform: uppercase;
+	letter-spacing: 12px;
+	z-index: 1;
+	animation: ggTextReveal 0.3s 0.25s ease-out both;
+}
+
+@keyframes ggEnter {
+	0% { clip-path: polygon(0% 50%, 100% 50%, 100% 50%, 0% 50%); }
+	100% { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+}
+
+@keyframes ggTextReveal {
+	0% { opacity: 0; transform: scale(1.5); filter: blur(8px); }
+	100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+@keyframes ggExit {
+	0% { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); filter: saturate(1); }
+	100% { clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%); filter: saturate(0); }
+}

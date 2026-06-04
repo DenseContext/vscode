@@ -176,6 +176,9 @@ import './contrib/xkcd/electron-browser/xkcd.contribution.js';
 // Context Key / Terminal Focus Probe
 import './contrib/contextKeyMikeTest/electron-browser/contextKeyMikeTest.contribution.js';
 
+// Claude Code Session Bar (second bar)
+import './contrib/claudeSessionBar/electron-browser/claudeSessionBar.contribution.js';
+
 // Local History
 import './contrib/localHistory/electron-browser/localHistory.contribution.js';
 

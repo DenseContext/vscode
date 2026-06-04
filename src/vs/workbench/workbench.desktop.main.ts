@@ -173,6 +173,9 @@ import './contrib/cutIn/electron-browser/cutIn.contribution.js';
 // XKCD (depends on Cut-In being registered first)
 import './contrib/xkcd/electron-browser/xkcd.contribution.js';
 
+// Context Key / Terminal Focus Probe
+import './contrib/contextKeyMikeTest/electron-browser/contextKeyMikeTest.contribution.js';
+
 // Local History
 import './contrib/localHistory/electron-browser/localHistory.contribution.js';
 

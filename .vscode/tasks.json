@@ -2,6 +2,28 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "_Build Mac App (Dev)",
+			"type": "gulp",
+			"task": "vscode-darwin-arm64",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "_Build Mac App (Production)",
+			"type": "gulp",
+			"task": "vscode-darwin-arm64-min-ci",
+			"group": "build",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new"
+			},
+			"problemMatcher": []
+		},
+		{
 			"type": "npm",
 			"script": "watch-client-transpiled",
 			"label": "Core - Transpile",

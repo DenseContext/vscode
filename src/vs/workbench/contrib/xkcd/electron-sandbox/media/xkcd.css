@@ -1,0 +1,306 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.xkcd-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 2500;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.6);
+	animation: xkcdFadeIn 0.3s ease-out forwards;
+	cursor: pointer;
+}
+
+.xkcd-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 24px;
+	max-height: 92vh;
+	overflow: hidden;
+	cursor: default;
+}
+
+.xkcd-card-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	flex: 0 1 auto;
+	min-height: 0;
+}
+
+.xkcd-card {
+	background: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+	max-width: 800px;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	overflow: hidden;
+	animation: xkcdSlideUp 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.xkcd-header {
+	padding: 16px 24px 8px;
+	display: flex;
+	align-items: baseline;
+	justify-content: center;
+	gap: 12px;
+}
+
+.xkcd-title {
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 20px;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0;
+}
+
+.xkcd-number {
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 14px;
+	color: #888888;
+}
+
+.xkcd-image-container {
+	padding: 8px 24px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 0;
+	overflow: auto;
+}
+
+.xkcd-image-container img {
+	max-width: 100%;
+	max-height: 50vh;
+	object-fit: contain;
+}
+
+.xkcd-alt {
+	padding: 12px 24px 16px;
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 13px;
+	font-style: italic;
+	color: #666666;
+	line-height: 1.4;
+	text-align: center;
+	border-top: 1px solid #eeeeee;
+	margin: 0 12px;
+}
+
+.xkcd-footer {
+	padding: 8px 24px 12px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.xkcd-link {
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 12px;
+	color: #6699cc;
+	text-decoration: none;
+	pointer-events: auto;
+}
+
+/* Nav arrows — circular buttons flanking the card */
+
+.xkcd-nav {
+	appearance: none;
+	-webkit-appearance: none;
+	flex-shrink: 0;
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	border: 1.5px solid rgba(255, 255, 255, 0.25);
+	background: rgba(255, 255, 255, 0.08);
+	color: rgba(255, 255, 255, 0.7);
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 22px;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	pointer-events: auto;
+	transition: all 0.2s ease;
+	padding: 0;
+	margin: 0;
+	outline: none;
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+
+.xkcd-nav:hover {
+	background: rgba(255, 255, 255, 0.18);
+	border-color: rgba(255, 255, 255, 0.5);
+	color: #ffffff;
+	transform: scale(1.1);
+	box-shadow: 0 0 16px rgba(255, 255, 255, 0.1);
+}
+
+.xkcd-nav:active {
+	transform: scale(0.95);
+}
+
+.xkcd-nav:disabled {
+	opacity: 0.2;
+	cursor: default;
+	transform: none;
+}
+
+.xkcd-nav:disabled:hover {
+	background: rgba(255, 255, 255, 0.08);
+	border-color: rgba(255, 255, 255, 0.25);
+	color: rgba(255, 255, 255, 0.7);
+	transform: none;
+	box-shadow: none;
+}
+
+/* Seen-comics grid */
+
+.xkcd-grid-section {
+	position: relative;
+	background: rgba(255, 255, 255, 0.08);
+	border-radius: 8px;
+	padding: 10px 14px;
+	align-self: stretch;
+	flex: 1 10 auto;
+	min-height: 120px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	animation: xkcdSlideUp 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) 0.05s both;
+}
+
+.xkcd-grid-scroll {
+	flex: 1 1 0;
+	min-height: 0;
+	overflow-y: auto;
+	border-radius: 4px;
+}
+
+.xkcd-grid-label {
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 11px;
+	color: rgba(255, 255, 255, 0.5);
+	margin-top: 6px;
+	text-align: center;
+}
+
+.xkcd-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 8px);
+	gap: 2px;
+	justify-content: center;
+}
+
+.xkcd-grid-cell {
+	width: 8px;
+	height: 8px;
+	border-radius: 1px;
+	background: rgba(255, 255, 255, 0.12);
+	cursor: pointer;
+	transition: background 0.1s ease, transform 0.1s ease;
+}
+
+.xkcd-grid-cell:hover {
+	background: rgba(255, 255, 255, 0.4);
+	transform: scale(1.6);
+	z-index: 1;
+}
+
+.xkcd-grid-cell-seen {
+	background: rgba(76, 175, 80, 0.6);
+}
+
+.xkcd-grid-cell-seen:hover {
+	background: rgba(76, 175, 80, 0.9);
+}
+
+.xkcd-grid-cell-current {
+	background: rgba(100, 150, 255, 0.8);
+	box-shadow: 0 0 3px rgba(100, 150, 255, 0.6);
+}
+
+.xkcd-grid-cell-current:hover {
+	background: rgba(100, 150, 255, 1);
+}
+
+.xkcd-grid-tooltip {
+	position: absolute;
+	padding: 3px 8px;
+	background: rgba(30, 30, 30, 0.95);
+	color: #ffffff;
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 11px;
+	border-radius: 4px;
+	pointer-events: none;
+	white-space: nowrap;
+	z-index: 10;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+	transform: translateX(-50%);
+}
+
+/* Provider dropdown */
+
+.xkcd-select-wrapper {
+	display: flex;
+	justify-content: center;
+	padding: 4px 0;
+}
+
+.xkcd-comic-select {
+	appearance: none;
+	-webkit-appearance: none;
+	background: #3c3c3c;
+	color: #cccccc;
+	border: 1px solid #555555;
+	border-radius: 6px;
+	padding: 6px 32px 6px 12px;
+	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	font-size: 12px;
+	cursor: pointer;
+	outline: none;
+	transition: all 0.15s ease;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+}
+
+.xkcd-comic-select:hover {
+	background-color: #4a4a4a;
+	border-color: #777777;
+	color: #ffffff;
+}
+
+.xkcd-comic-select:focus {
+	border-color: rgba(100, 150, 255, 0.6);
+	box-shadow: 0 0 0 1px rgba(100, 150, 255, 0.3);
+}
+
+.xkcd-comic-select option {
+	background: #2d2d2d;
+	color: #ffffff;
+}
+
+@keyframes xkcdFadeIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@keyframes xkcdSlideUp {
+	0% { transform: translateY(40px) scale(0.95); opacity: 0; }
+	100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes xkcdFadeOut {
+	0% { opacity: 1; }
+	100% { opacity: 0; }
+}

@@ -201,6 +201,9 @@ export interface ICommonNativeHostService {
 	// GitHub mobile upload API (runs in main process to avoid CORS)
 	uploadFileViaMobileApi(token: string, repoId: string, fileName: string, fileBytes: VSBuffer, contentType: string): Promise<{ fileName: string; assetUrl: string; contentType: string }>;
 
+	// CORS-free fetch (runs in main process via electron.net)
+	fetchUrl(url: string): Promise<{ statusCode: number; body: string }>;
+
 	// Process
 	getProcessId(): Promise<number | undefined>;
 	killProcess(pid: number, code: string): Promise<void>;

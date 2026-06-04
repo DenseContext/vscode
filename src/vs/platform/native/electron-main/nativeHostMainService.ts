@@ -957,6 +957,20 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 	//#endregion
 
 
+	//#region CORS-free fetch
+
+	async fetchUrl(_windowId: number | undefined, url: string): Promise<{ statusCode: number; body: string }> {
+		const { net } = await import('electron');
+		const response = await net.fetch(url);
+		return {
+			statusCode: response.status,
+			body: await response.text(),
+		};
+	}
+
+	//#endregion
+
+
 	//#region Process
 
 	async getProcessId(windowId: number | undefined): Promise<number | undefined> {

@@ -9,6 +9,7 @@ import { Extensions, IConfigurationRegistry } from '../../../../platform/configu
 import { WorkbenchPhase, registerWorkbenchContribution2, getWorkbenchContribution } from '../../../common/contributions.js';
 import { registerAction2, Action2 } from '../../../../platform/actions/common/actions.js';
 import { ServicesAccessor } from '../../../../platform/instantiation/common/instantiation.js';
+import { IConfigurationService } from '../../../../platform/configuration/common/configuration.js';
 import { CutInOverlay } from '../browser/cutIn.js';
 
 registerWorkbenchContribution2(
@@ -28,6 +29,22 @@ registerAction2(class extends Action2 {
 
 	run(_accessor: ServicesAccessor): void {
 		getWorkbenchContribution<CutInOverlay>(CutInOverlay.ID).showCutIn();
+	}
+});
+
+registerAction2(class extends Action2 {
+	constructor() {
+		super({
+			id: 'workbench.action.toggleCutIn',
+			title: nls.localize2('toggleCutIn', 'Toggle Cut-In Animation on Startup'),
+			f1: true,
+		});
+	}
+
+	async run(accessor: ServicesAccessor): Promise<void> {
+		const configurationService = accessor.get(IConfigurationService);
+		const current = configurationService.getValue<boolean>('workbench.experimental.cutIn.enabled');
+		await configurationService.updateValue('workbench.experimental.cutIn.enabled', !current);
 	}
 });
 
